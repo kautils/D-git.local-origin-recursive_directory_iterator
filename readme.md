@@ -64,10 +64,10 @@ int main(){
     auto dl = __dlopen(PATH_TO_SHARED_LIB,rtld_lazy|rtld_nodelete);
     if(!dl){ fprintf(stderr,"fail to open sharedlib\n");throw false; }
 
-    auto recursive_itr_factory = (decltype(kautil::filesystem::recursive_directory_iterator)*) kautil_dlsym(dl,"recursive_directory_iterator");
+    auto recursive_itr_factory = (decltype(kautil_recursive_directory_iterator)*) kautil_dlsym(dl,"kautil_recursive_directory_iterator");
     if(!recursive_itr_factory){ fprintf(stderr,"fail to find symbol\n");throw false; }
 
-    auto recursive_itr_free = (decltype(kautil::filesystem::recursive_directory_iterator_free)*) kautil_dlsym(dl,"recursive_directory_iterator_free");
+    auto recursive_itr_free = (decltype(kautil_recursive_directory_iterator_free)*) kautil_dlsym(dl,"kautil_recursive_directory_iterator_free");
     if(!recursive_itr_free){ fprintf(stderr,"fail to find symbol\n");throw false; }
 
     {
