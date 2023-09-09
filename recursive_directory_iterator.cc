@@ -84,19 +84,7 @@ void RecursiveDirectoryIteratorInternal::set_dir(const char * p){
 
 
 
-
-//
-//
 recursive_directory_iterator_reference & RecursiveDirectoryIterator::operator*(){ return (recursive_directory_iterator_reference &)*this; }
-////RecursiveDirectoryIterator::self_type & RecursiveDirectoryIterator::operator*(){ return *this; }
-//
-//
-//void /*RecursiveDirectoryIterator::*/fake_copy_constructor(RecursiveDirectoryIterator & r,RecursiveDirectoryIterator const& l){
-//    r.m = new RecursiveDirectoryIteratorInternal;
-//    l.m->cpy(r.m);
-//    r.m->set_dir(r.m->path.data());
-//}
-
 RecursiveDirectoryIterator::RecursiveDirectoryIterator(RecursiveDirectoryIterator const& l) {
     m = new RecursiveDirectoryIteratorInternal;
     l.m->cpy(m);
@@ -210,10 +198,14 @@ RecursiveDirectoryIterator::self_type & RecursiveDirectoryIterator::end(){
     return *res;
 }
 
-extern "C" kautil::filesystem::RecursiveDirectoryIterator * recursive_directory_iterator(const char * p){ return new kautil::filesystem::RecursiveDirectoryIterator{p}; }
-extern "C" void recursive_directory_iterator_free(RecursiveDirectoryIterator * itr){ delete itr; }
+
+RecursiveDirectoryIterator recursive_directory_iterator(const char * p){
+    return RecursiveDirectoryIterator{p};
+}
 
 } //namespace filesystem{
 } //namespace kautil{
 
+extern "C" kautil::filesystem::RecursiveDirectoryIterator * kautil_recursive_directory_iterator(const char * p){ return new kautil::filesystem::RecursiveDirectoryIterator{p}; }
+extern "C" void kautil_recursive_directory_iterator_free(kautil::filesystem::RecursiveDirectoryIterator * itr){ delete itr; }
 

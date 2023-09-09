@@ -5,4 +5,4 @@ project(KautilFileSystemRecursiveDirectoryIterator.${__version}
         VERSION ${__version}
         )
 unset(__version)
-include(${CMAKE_CURRENT_LIST_DIR}/walk.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/recursive_directory_iterator.cmake)

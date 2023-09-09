@@ -44,13 +44,13 @@ struct recursive_directory_iterator_reference : private RecursiveDirectoryIterat
     using RecursiveDirectoryIterator::is_directory;
 };
 
-extern "C" RecursiveDirectoryIterator * recursive_directory_iterator(const char * p);
-extern "C" void recursive_directory_iterator_free(RecursiveDirectoryIterator * itr);
-
+RecursiveDirectoryIterator recursive_directory_iterator(const char * p);
 
 } //namespace filesystem{
 } //namespace kautil{
 
+extern "C" kautil::filesystem::RecursiveDirectoryIterator * kautil_recursive_directory_iterator(const char * p);
+extern "C" void kautil_recursive_directory_iterator_free(kautil::filesystem::RecursiveDirectoryIterator * itr);
 
 
 

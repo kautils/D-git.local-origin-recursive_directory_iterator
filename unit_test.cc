@@ -7,15 +7,12 @@ int tmain_kautil_wstd_fs_walk_static(){
     const char *path="C:\\Windows\\System32";
 //    while(true)
 //    for(auto i = 0; i <100; ++i)
-    {
-        for(auto & e : kautil::filesystem::recursive_directory_iterator(path)){
-            for(auto & ee : kautil::filesystem::recursive_directory_iterator(e.path())){
-                printf("%d %s\n",ee.is_directory(),ee.path());fflush(stdout);
-            }
-            printf("%d %s\n",e.is_directory(),e.path());fflush(stdout);
+    for(auto & e : kautil::filesystem::recursive_directory_iterator(path)){
+        for(auto & ee : kautil::filesystem::recursive_directory_iterator(e.path())){
+            printf("%d %s\n",ee.is_directory(),ee.path());fflush(stdout);
         }
+        printf("%d %s\n",e.is_directory(),e.path());fflush(stdout);
     }
-    
     return 0;
 }
 
@@ -70,8 +67,8 @@ int tmain_kautil_wstd_fs_walk_shared(){
     auto dl = __dlopen(PATH_TO_SHARED_LIB,rtld_lazy|rtld_nodelete);
     if(!dl){ fprintf(stderr,"fail to open sharedlib\n");throw false; }
     
-    auto recursive_itr_factory = (decltype(kautil::filesystem::recursive_directory_iterator)*) kautil_dlsym(dl,"recursive_directory_iterator");
-    auto recursive_itr_free = (decltype(kautil::filesystem::recursive_directory_iterator_free)*) kautil_dlsym(dl,"recursive_directory_iterator_free");
+    auto recursive_itr_factory = (decltype(kautil_recursive_directory_iterator)*) kautil_dlsym(dl,"kautil_recursive_directory_iterator");
+    auto recursive_itr_free = (decltype(kautil_recursive_directory_iterator_free)*) kautil_dlsym(dl,"kautil_recursive_directory_iterator_free");
 
     if(!recursive_itr_factory){ fprintf(stderr,"fail to find symbol\n");throw false; }
     if(!recursive_itr_free){ fprintf(stderr,"fail to find symbol\n");throw false; }
