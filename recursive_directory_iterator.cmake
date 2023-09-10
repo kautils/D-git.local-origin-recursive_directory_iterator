@@ -104,12 +104,9 @@ if(${KAUTIL_BUILD_SHARED})
 
     CMakeLibraryTemplate(${module_name} EXPORT_LIB_TYPE static ${${module_name}_common_pref} )
     target_compile_definitions(${${module_name}_static} PRIVATE KAUTIL_RECURSIVE_DIRECTORY_ITERATOR_SO="${__path_to_shared_lib_build_interface}")
-    target_compile_definitions(${${module_name}_static} INTERFACE 
-            KAUTIL_RECURSIVE_DIRECTORY_ITERATOR_SO=$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/lib/${__installed_sahred_lib_name}>
-            )
-#    target_compile_definitions(${${module_name}_static} INTERFACE 
-#            KAUTIL_RECURSIVE_DIRECTORY_ITERATOR_SO="$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${__installed_sahred_lib_name}">
-#            )
+    target_compile_definitions(${${module_name}_static} INTERFACE KAUTIL_RECURSIVE_DIRECTORY_ITERATOR_SO=$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/lib/${__installed_sahred_lib_name}>)
+    
+    
     
     set(__t ${${module_name}_static_tmain})
     add_executable(${__t})
