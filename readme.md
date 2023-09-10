@@ -87,3 +87,56 @@ int main(){
 }
 
 ```
+
+* extern with utils (recursive_directory_iterator_ext.h)
+```c++
+
+
+namespace kautil {
+namespace extern_utils {
+
+template<typename X>
+struct iterator{
+    explicit iterator(X * x ) :m(x){}
+    iterator & operator++(){ (*m).operator++();return *this; }
+    X & operator*(){ return *m; }
+    bool operator!=(const iterator & l){ return *m != *l.m; }
+    iterator begin(){ return iterator{&m->begin()}; }
+    iterator end(){ return iterator{&m->end()}; }
+private:
+    X * m;
+};
+
+template<typename X>
+struct scope{
+    explicit scope(X *x) :m(x){}
+    ~scope(){ m->~X(); }
+    X * operator &(){return m;}
+    X & operator *(){return *m;}
+//    operator X&() { return *m; }
+private:
+    X * m;
+};
+
+} //namespace extern_utils {
+} //namespace kautil {
+
+
+#include "recursive_directory_iterator_ext.h"
+#include <stdio.h>
+
+int tmain_kautil_wstd_fs_recursive_directory_iterator_extern_static(){
+    auto rdir_itr_auto = kautil_recursive_directory_iterator_extern::kautil_recursive_directory_iterator_extern_auto();
+    if(!rdir_itr_auto){ fprintf(stderr,"fail to open share library"); return 1; }
+    {
+        auto itr = kautil::extern_utils::scope(rdir_itr_auto->initialize("."));
+        for(auto & e : kautil::extern_utils::iterator(&itr)){  printf("%s\n",e.path());fflush(stdout); }
+    }
+    return 0;
+}
+
+int main(){
+    return tmain_kautil_wstd_fs_recursive_directory_iterator_extern_static();
+}
+
+```

@@ -78,12 +78,13 @@ if(${KAUTIL_BUILD_SHARED})
             )
     add_dependencies(${__t} ${${module_name}_shared} )
     
-    list(APPEND walk_cmake_unsetter __installed_shared_lib_name)
+    list(APPEND walk_cmake_unsetter __installed_shared_lib_name __path_to_shared_lib_build_interface __target_to_shared_lib_build_interface)
     set(__installed_sahred_lib_name ${CMAKE_SHARED_LIBRARY_PREFIX}${module_name}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(__target_to_shared_lib_build_interface ${${module_name}_shared})
     set(__path_to_shared_lib_build_interface $<TARGET_FILE:${${module_name}_shared}>)
     
+    
     set(module_name recursive_directory_iterator_extern)
-    message(${module_name})
     unset(srcs)
     set(srcs ${CMAKE_CURRENT_LIST_DIR}/recursive_directory_iterator_ext.cc)
     set(${module_name}_common_pref
@@ -105,7 +106,7 @@ if(${KAUTIL_BUILD_SHARED})
     CMakeLibraryTemplate(${module_name} EXPORT_LIB_TYPE static ${${module_name}_common_pref} )
     target_compile_definitions(${${module_name}_static} PRIVATE KAUTIL_RECURSIVE_DIRECTORY_ITERATOR_SO="${__path_to_shared_lib_build_interface}")
     target_compile_definitions(${${module_name}_static} INTERFACE KAUTIL_RECURSIVE_DIRECTORY_ITERATOR_SO=$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/lib/${__installed_sahred_lib_name}>)
-    
+    add_dependencies(${${module_name}_static} ${__target_to_shared_lib_build_interface})
     
     
     set(__t ${${module_name}_static_tmain})
@@ -113,7 +114,6 @@ if(${KAUTIL_BUILD_SHARED})
     target_sources(${__t} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/unit_test.cc)
     target_link_libraries(${__t} PRIVATE ${${module_name}_static})
     target_compile_definitions(${__t} PRIVATE ${${module_name}_static_tmain_ppcs})
-    
     
 endif()
 
