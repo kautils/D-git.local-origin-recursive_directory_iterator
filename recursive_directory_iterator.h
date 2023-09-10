@@ -1,5 +1,5 @@
-#ifndef KAUTIL_GENERAL_FILE_WALK_H
-#define KAUTIL_GENERAL_FILE_WALK_H
+#ifndef KAUTIL_FILESYSTEM_RECURSIVE_DIRECTORY_ITERATOR_H
+#define KAUTIL_FILESYSTEM_RECURSIVE_DIRECTORY_ITERATOR_H
 
 #include <stdint.h>
 
@@ -34,6 +34,7 @@ struct RecursiveDirectoryIterator{
 
 private:
     RecursiveDirectoryIteratorInternal * m = 0;
+    void * extern_info = 0;
 };
 
 
@@ -42,7 +43,7 @@ struct recursive_directory_iterator_reference : private RecursiveDirectoryIterat
     virtual ~recursive_directory_iterator_reference()=default;
     using RecursiveDirectoryIterator::path; 
     using RecursiveDirectoryIterator::is_directory;
-};
+};/**/
 
 RecursiveDirectoryIterator recursive_directory_iterator(const char * p);
 

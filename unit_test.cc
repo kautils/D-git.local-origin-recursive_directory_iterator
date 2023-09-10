@@ -1,33 +1,3 @@
-#ifdef TMAIN_KAUTIL_WSTD_FS_RECURSIVE_DIRECTORY_ITERATOR_STATIC
-
-#include "recursive_directory_iterator.h"
-#include <stdio.h>
-
-int tmain_kautil_wstd_fs_walk_static(){
-    const char *path="C:\\Windows\\System32";
-//    while(true)
-//    for(auto i = 0; i <100; ++i)
-    for(auto & e : kautil::filesystem::recursive_directory_iterator(path)){
-        for(auto & ee : kautil::filesystem::recursive_directory_iterator(e.path())){
-            printf("%d %s\n",ee.is_directory(),ee.path());fflush(stdout);
-        }
-        printf("%d %s\n",e.is_directory(),e.path());fflush(stdout);
-    }
-    return 0;
-}
-
-
-int main(){
-    return tmain_kautil_wstd_fs_walk_static();
-}
-
-
-#elif defined(TMAIN_KAUTIL_WSTD_FS_RECURSIVE_DIRECTORY_ITERATOR_SHARED)
-
-
-#include <stdio.h>
-#include "recursive_directory_iterator.h"
-#include "sharedlib/sharedlib.h"
 
 
 namespace kautil {
@@ -60,6 +30,38 @@ private:
 } //namespace extern_utils {
 } //namespace kautil {
 
+
+
+#ifdef TMAIN_KAUTIL_WSTD_FS_RECURSIVE_DIRECTORY_ITERATOR_STATIC
+
+#include "recursive_directory_iterator.h"
+#include <stdio.h>
+
+int tmain_kautil_wstd_fs_walk_static(){
+    const char *path="C:\\Windows\\System32";
+//    while(true)
+//    for(auto i = 0; i <100; ++i)
+    for(auto & e : kautil::filesystem::recursive_directory_iterator(path)){
+        for(auto & ee : kautil::filesystem::recursive_directory_iterator(e.path())){
+            printf("%d %s\n",ee.is_directory(),ee.path());fflush(stdout);
+        }
+        printf("%d %s\n",e.is_directory(),e.path());fflush(stdout);
+    }
+    return 0;
+}
+
+
+int main(){
+    return tmain_kautil_wstd_fs_walk_static();
+}
+
+
+#elif defined(TMAIN_KAUTIL_WSTD_FS_RECURSIVE_DIRECTORY_ITERATOR_SHARED)
+
+
+#include <stdio.h>
+#include "recursive_directory_iterator.h"
+#include "sharedlib/sharedlib.h"
 
 
 int tmain_kautil_wstd_fs_walk_shared(){
@@ -99,15 +101,35 @@ int tmain_kautil_wstd_fs_walk_shared(){
     
     
     __dlclose(dl);
-    
-    
-    
     return 0;
 }
 
 int main(){
     tmain_kautil_wstd_fs_walk_shared();
 }
+
+
+#elif defined(TMAIN_KAUTIL_WSTD_FS_RECURSIVE_DIRECTORY_ITERATOR_EXTERN_STATIC)
+
+#include "recursive_directory_iterator_ext.h"
+#include <stdio.h>
+
+int tmain_kautil_wstd_fs_recursive_directory_iterator_extern_static(){
+    auto rdir_itr_auto = kautil_recursive_directory_iterator_extern::kautil_recursive_directory_iterator_extern_auto();
+    if(!rdir_itr_auto){ fprintf(stderr,"fail to open share library"); return 1; }
+    while(true)
+    for(auto i = 0; i < 10000; ++i)
+    {
+        auto itr = kautil::extern_utils::scope(rdir_itr_auto->initialize("."));
+        for(auto & e : kautil::extern_utils::iterator(&itr)){  printf("%s\n",e.path());fflush(stdout); }
+    }
+    return 0;
+}
+
+int main(){
+    return tmain_kautil_wstd_fs_recursive_directory_iterator_extern_static();
+}
+
 
 
 #endif

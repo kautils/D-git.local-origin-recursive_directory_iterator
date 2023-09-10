@@ -35,7 +35,7 @@ list(APPEND __libs kautil::c11_string_allocator::0.0.1::static)
 set(module_name recursive_directory_iterator)
 get_filename_component(__include_dir "${CMAKE_CURRENT_LIST_DIR}" DIRECTORY)
 unset(srcs)
-file(GLOB srcs ${CMAKE_CURRENT_LIST_DIR}/*.cc)
+set(srcs ${CMAKE_CURRENT_LIST_DIR}/recursive_directory_iterator.cc)
 set(${module_name}_common_pref
     #DEBUG_VERBOSE
     MODULE_PREFIX kautil wstd fs
@@ -54,7 +54,6 @@ set(${module_name}_common_pref
 
 CMakeLibraryTemplate(${module_name} EXPORT_LIB_TYPE static ${${module_name}_common_pref} )
 CMakeLibraryTemplate(${module_name} EXPORT_LIB_TYPE shared ${${module_name}_common_pref} )
-
 
 set(__t ${${module_name}_static_tmain})
 add_executable(${__t})
@@ -78,8 +77,60 @@ if(${KAUTIL_BUILD_SHARED})
             PATH_TO_SHARED_LIB="$<TARGET_FILE:${${module_name}_shared}>"
             )
     add_dependencies(${__t} ${${module_name}_shared} )
+    
+    list(APPEND walk_cmake_unsetter __installed_shared_lib_name)
+    set(__installed_sahred_lib_name ${CMAKE_SHARED_LIBRARY_PREFIX}${module_name}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(__path_to_shared_lib_build_interface $<TARGET_FILE:${${module_name}_shared}>)
+    
+    set(module_name recursive_directory_iterator_extern)
+    message(${module_name})
+    unset(srcs)
+    set(srcs ${CMAKE_CURRENT_LIST_DIR}/recursive_directory_iterator_ext.cc)
+    set(${module_name}_common_pref
+        #DEBUG_VERBOSE
+        MODULE_PREFIX kautil wstd fs 
+        MODULE_NAME ${module_name}
+        INCLUDES $<BUILD_INTERFACE:${__include_dir}> $<INSTALL_INTERFACE:include> 
+        SOURCES ${srcs} 
+        LINK_LIBS  kautil::sharedlib::0.0.1::static
+        EXPORT_NAME_PREFIX ${PROJECT_NAME}Extern
+        EXPORT_VERSION ${PROJECT_VERSION}
+        EXPORT_VERSION_COMPATIBILITY AnyNewerVersion
+
+        DESTINATION_INCLUDE_DIR include/kautil/wstd/fs
+        DESTINATION_CMAKE_DIR cmake
+        DESTINATION_LIB_DIR lib
+    )
+
+    CMakeLibraryTemplate(${module_name} EXPORT_LIB_TYPE static ${${module_name}_common_pref} )
+    target_compile_definitions(${${module_name}_static} PRIVATE KAUTIL_RECURSIVE_DIRECTORY_ITERATOR_SO="${__path_to_shared_lib_build_interface}")
+    target_compile_definitions(${${module_name}_static} INTERFACE 
+            KAUTIL_RECURSIVE_DIRECTORY_ITERATOR_SO=$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/lib/${__installed_sahred_lib_name}>
+            )
+#    target_compile_definitions(${${module_name}_static} INTERFACE 
+#            KAUTIL_RECURSIVE_DIRECTORY_ITERATOR_SO="$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${__installed_sahred_lib_name}">
+#            )
+    
+    set(__t ${${module_name}_static_tmain})
+    add_executable(${__t})
+    target_sources(${__t} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/unit_test.cc)
+    target_link_libraries(${__t} PRIVATE ${${module_name}_static})
+    target_compile_definitions(${__t} PRIVATE ${${module_name}_static_tmain_ppcs})
+    
+    
 endif()
+
+
+
 
 foreach(__var ${walk_cmake_unsetter})
     unset(${__var})
 endforeach()
+
+
+
+
+
+
+
+
