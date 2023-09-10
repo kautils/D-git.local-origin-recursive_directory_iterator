@@ -18,8 +18,7 @@ struct kautil_recursive_directory_iterator_extern_internal {
         initialize = (decltype(kautil_recursive_directory_iterator)*) dlsym(dl,"kautil_recursive_directory_iterator");
         free = (decltype(kautil_recursive_directory_iterator_free)*) dlsym(dl,"kautil_recursive_directory_iterator_free");
         close = dlclose;
-        if( (!dl + !initialize + !free + !close) == 0) return true;
-        return false;
+        return (!dl + !initialize + !free + !close) == 0 ;
     }
     
     decltype(kautil_recursive_directory_iterator)* initialize=0;
