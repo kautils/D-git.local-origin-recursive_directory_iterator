@@ -1,7 +1,7 @@
 
 
 #include "./recursive_directory_iterator_ext.h"
-#include "sharedlib/sharedlib.h"
+#include "kautil/sharedlib/sharedlib.h"
 
 
 namespace kautil{
