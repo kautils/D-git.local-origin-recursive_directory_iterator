@@ -61,7 +61,7 @@ int main(){
 
 #include <stdio.h>
 #include "recursive_directory_iterator.h"
-#include "sharedlib/sharedlib.h"
+#include "kautil/sharedlib/sharedlib.h"
 
 
 int tmain_kautil_wstd_fs_walk_shared(){
@@ -114,6 +114,9 @@ int main(){
 #include "recursive_directory_iterator_ext.h"
 #include <stdio.h>
 
+#include <crtdbg.h>
+
+
 int tmain_kautil_wstd_fs_recursive_directory_iterator_extern_static(){
     auto rdir_itr_auto = kautil::recursive_directory_iterator_extern::auto_dl();
     if(!rdir_itr_auto){ fprintf(stderr,"fail to open share library"); return 1; }
@@ -123,6 +126,14 @@ int tmain_kautil_wstd_fs_recursive_directory_iterator_extern_static(){
         auto itr = kautil::extern_utils::scope(rdir_itr_auto->initialize("."));
         for(auto & e : kautil::extern_utils::iterator(&itr)){  printf("%s\n",e.path());fflush(stdout); }
     }
+    
+
+//    while(true)
+//    for(auto i = 0; i < 10000; ++i)
+//    {
+//        
+//        
+//    }
     return 0;
 }
 

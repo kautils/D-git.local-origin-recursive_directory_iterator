@@ -7,7 +7,15 @@
 #include <string>
 #include <vector>
 
-#include "c11_string_allocator/c11_string_allocator.h"
+#include "kautil/c11_string_allocator/c11_string_allocator.h"
+
+
+
+
+
+
+
+
 
 
 
@@ -39,6 +47,15 @@ struct RecursiveDirectoryIteratorInternal{
     void set_dir(const char * path);
     void reset();
     bool next();
+    
+    
+    uint64_t dir_cnt=0;
+    int closedir (DIR* dir){ --dir_cnt; return ::closedir(dir);  }
+    DIR* opendir (const char * dir){ ++dir_cnt; return ::opendir(dir); }
+    ~RecursiveDirectoryIteratorInternal(){
+        if(root &&  (dir_cnt > 0) )int jjj = 0;
+    }
+    
 };
 
 
@@ -46,7 +63,6 @@ void RecursiveDirectoryIteratorInternal::release_lev(){
     for(auto l : lev){
         if(l->dir)closedir(l->dir);
         delete l;
-
     } 
     lev.resize(0);
 }

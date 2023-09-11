@@ -33,14 +33,13 @@ list(APPEND __libs kautil::c11_string_allocator::0.0.1::static)
 
 
 set(module_name recursive_directory_iterator)
-get_filename_component(__include_dir "${CMAKE_CURRENT_LIST_DIR}" DIRECTORY)
 unset(srcs)
 set(srcs ${CMAKE_CURRENT_LIST_DIR}/recursive_directory_iterator.cc)
 set(${module_name}_common_pref
     #DEBUG_VERBOSE
     MODULE_PREFIX kautil wstd fs
     MODULE_NAME ${module_name}
-    INCLUDES $<BUILD_INTERFACE:${__include_dir}> $<INSTALL_INTERFACE:include> 
+    INCLUDES $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}> $<INSTALL_INTERFACE:include> ${CMAKE_CURRENT_LIST_DIR} 
     SOURCES ${srcs}
     LINK_LIBS ${__libs} 
     EXPORT_NAME_PREFIX ${PROJECT_NAME}
