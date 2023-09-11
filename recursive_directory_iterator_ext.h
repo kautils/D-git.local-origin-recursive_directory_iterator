@@ -3,23 +3,30 @@
 
 #include "recursive_directory_iterator.h"
 
-struct kautil_recursive_directory_iterator_extern_internal;
-struct kautil_recursive_directory_iterator_extern{
-    static kautil_recursive_directory_iterator_extern * kautil_recursive_directory_iterator_extern_auto();
-    static kautil_recursive_directory_iterator_extern * kautil_recursive_directory_iterator_extern_initialize(
-        void* (*dlopen)(const char * ,int)
-        ,void* (*dlsym)(void * ,const char *)
-        ,int (*dlclose)(void *)
-        ,int option);
-    static void kautil_recursive_directory_iterator_extern_free(kautil_recursive_directory_iterator_extern * hdl);
+namespace kautil{
     
-    kautil_recursive_directory_iterator_extern();
-    ~kautil_recursive_directory_iterator_extern();
-    kautil::filesystem::RecursiveDirectoryIterator * initialize(const char * p);
-    void free(kautil::filesystem::RecursiveDirectoryIterator *);
-private:
-    kautil_recursive_directory_iterator_extern_internal  * m =0;
-};
+    struct recursive_directory_iterator_extern_internal;
+    struct recursive_directory_iterator_extern{
+        using self_type = recursive_directory_iterator_extern;
+        static self_type * auto_dl();
+        static self_type * load_dl(
+            void* (*dlopen)(const char * ,int)
+            ,void* (*dlsym)(void * ,const char *)
+            ,int (*dlclose)(void *)
+            ,int option);
+        static void close_dl(self_type * hdl);
+        
+        recursive_directory_iterator_extern();
+        ~recursive_directory_iterator_extern();
+        kautil::filesystem::RecursiveDirectoryIterator * initialize(const char * p);
+        void free(kautil::filesystem::RecursiveDirectoryIterator *);
+        
+    private:
+        recursive_directory_iterator_extern_internal  * m =0;
+    };
+    
+}
+
 
 
 

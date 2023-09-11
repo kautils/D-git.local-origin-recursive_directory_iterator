@@ -115,7 +115,7 @@ int main(){
 #include <stdio.h>
 
 int tmain_kautil_wstd_fs_recursive_directory_iterator_extern_static(){
-    auto rdir_itr_auto = kautil_recursive_directory_iterator_extern::kautil_recursive_directory_iterator_extern_auto();
+    auto rdir_itr_auto = kautil::recursive_directory_iterator_extern::auto_dl();
     if(!rdir_itr_auto){ fprintf(stderr,"fail to open share library"); return 1; }
     while(true)
     for(auto i = 0; i < 10000; ++i)
