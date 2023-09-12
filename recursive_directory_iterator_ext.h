@@ -15,7 +15,6 @@ namespace kautil{
             ,int (*dlclose)(void *)
             ,int option);
         static void close_dl(self_type * hdl);
-        
         recursive_directory_iterator_extern();
         ~recursive_directory_iterator_extern();
         kautil::filesystem::RecursiveDirectoryIterator * initialize(const char * p);

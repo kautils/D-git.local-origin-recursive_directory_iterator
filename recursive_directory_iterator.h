@@ -22,6 +22,7 @@ struct RecursiveDirectoryIterator{
     virtual bool operator!=(const self_type & l) const;
     virtual self_type & begin();
     virtual self_type & end();
+    virtual void free();
     
     /// @note i want to prevent reference to call begin / end recursively(inside foreach) and to avoid copying members of __A.  
     virtual recursive_directory_iterator_reference & operator*();

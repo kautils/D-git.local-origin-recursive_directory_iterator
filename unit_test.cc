@@ -19,7 +19,7 @@ private:
 template<typename X>
 struct scope{
     explicit scope(X *x) :m(x){}
-    ~scope(){ m->~X(); }
+    ~scope(){ m->free(); }
     X * operator &(){return m;}
     X & operator *(){return *m;}
 //    operator X&() { return *m; }
@@ -114,26 +114,16 @@ int main(){
 #include "recursive_directory_iterator_ext.h"
 #include <stdio.h>
 
-#include <crtdbg.h>
-
 
 int tmain_kautil_wstd_fs_recursive_directory_iterator_extern_static(){
     auto rdir_itr_auto = kautil::recursive_directory_iterator_extern::auto_dl();
     if(!rdir_itr_auto){ fprintf(stderr,"fail to open share library"); return 1; }
-    while(true)
-    for(auto i = 0; i < 10000; ++i)
+//    while(true)
+//    for(auto i = 0; i < 100; ++i)
     {
         auto itr = kautil::extern_utils::scope(rdir_itr_auto->initialize("."));
         for(auto & e : kautil::extern_utils::iterator(&itr)){  printf("%s\n",e.path());fflush(stdout); }
     }
-    
-
-//    while(true)
-//    for(auto i = 0; i < 10000; ++i)
-//    {
-//        
-//        
-//    }
     return 0;
 }
 

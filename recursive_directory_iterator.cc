@@ -10,13 +10,7 @@
 #include "kautil/c11_string_allocator/c11_string_allocator.h"
 
 
-
-
-
-
-
-
-
+#include "debug_new.h"
 
 
 namespace kautil{
@@ -133,6 +127,9 @@ RecursiveDirectoryIterator::~RecursiveDirectoryIterator(){
     }
     delete m; 
 }
+
+
+void  RecursiveDirectoryIterator::free() { delete this; }
 
 bool RecursiveDirectoryIterator::is_directory(){ return m->is_dir(m->path_cur.data()); }
 

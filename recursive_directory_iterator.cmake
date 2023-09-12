@@ -54,6 +54,10 @@ set(${module_name}_common_pref
 CMakeLibraryTemplate(${module_name} EXPORT_LIB_TYPE static ${${module_name}_common_pref} )
 CMakeLibraryTemplate(${module_name} EXPORT_LIB_TYPE shared ${${module_name}_common_pref} )
 
+message(WARNING debug)
+target_link_libraries(${${module_name}_shared} PRIVATE kautil_debug_nvwa_0.0.1_static)
+
+
 set(__t ${${module_name}_static_tmain})
 add_executable(${__t})
 target_sources(${__t} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/unit_test.cc)
