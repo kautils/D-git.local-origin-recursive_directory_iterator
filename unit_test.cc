@@ -6,7 +6,7 @@ namespace extern_utils {
 template<typename X>
 struct iterator{
     explicit iterator(X * x ) :m(x){}
-    iterator & operator++(){ (*m).operator++();return *this; }
+    iterator & operator++(){ ++(*m);return *this; }
     X & operator*(){ return *m; }
     bool operator!=(const iterator & l){ return *m != *l.m; }
     iterator begin(){ return iterator{&m->begin()}; }
